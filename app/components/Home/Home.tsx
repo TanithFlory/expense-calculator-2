@@ -15,6 +15,17 @@ interface User {
 export default function Home() {
   const [userData, setUserData] = useState<User[]>();
   const [loading, setLoading] = useState(true);
+
+  const currentUser = localStorage.getItem("userId");
+  const moneyUserOwes =
+    userData && userData.length > 0
+      ? userData
+          .filter((user) => user.userId !== currentUser)
+          .reduce((total, user) => total + user.totalExpenses, 0)
+      : 0;
+
+  console.log(moneyUserOwes);
+
   async function getData() {
     try {
       const response = await fetch("/api/get-users");
@@ -36,7 +47,7 @@ export default function Home() {
   }
   return (
     <div className="max-w-[1200px] mx-auto py-20">
-      <TotalExpenses />
+      <TotalExpenses moneyUserOwes={moneyUserOwes} />
       <div className="flex gap-4 items-center justify-center flex-wrap">
         {userData &&
           userData.map(({ userId, totalExpenses, paymentLink }, key) => {
@@ -44,7 +55,7 @@ export default function Home() {
               <ExpenseCard
                 userId={`${userId.charAt(0).toUpperCase()}${userId.slice(1)}`}
                 totalExpenses={totalExpenses}
-                paymentLink={`${paymentLink}&am=${totalExpenses / 6}`}
+                paymentLink={`${paymentLink}&am=${totalExpenses / 4}`}
                 key={key}
               />
             );

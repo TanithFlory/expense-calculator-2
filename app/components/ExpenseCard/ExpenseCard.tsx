@@ -9,6 +9,7 @@ export default function ExpenseCard({
   totalExpenses: number;
   paymentLink: string;
 }) {
+  const currentUser = localStorage.getItem("userId");
   return (
     <div className="bg-custom-gradient shadow-inset-custom p-5 w-full max-w-[320px] rounded-md">
       <div className="flex items-center justify-between">
@@ -21,12 +22,14 @@ export default function ExpenseCard({
             </span>
           </div>
         </div>
-        <a
-          className="bg-green-400 rounded-md px-2 py-1 text-sm text-black cursor-pointer"
-          href={paymentLink}
-        >
-          Pay
-        </a>
+        {currentUser !== userId.toLowerCase() ? (
+          <a
+            className="bg-green-400 rounded-md px-2 py-1 text-sm text-black cursor-pointer"
+            href={paymentLink}
+          >
+            Pay
+          </a>
+        ) : null}
       </div>
       <Link
         href={`/view-expense/${userId.toLowerCase()}`}

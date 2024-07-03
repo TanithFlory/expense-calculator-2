@@ -8,9 +8,11 @@ import Spinner from "@/app/utils/Spinner";
 export default function YourExpenses({
   userId,
   hideDelete,
+  moneyUserOwes,
 }: {
   userId?: string;
   hideDelete?: boolean;
+  moneyUserOwes?: number;
 }) {
   const [expenses, setExpenses] = useState<Expense[] | null>(null);
   const [totalExpenses, setTotalExpenses] = useState(0);
@@ -34,6 +36,20 @@ export default function YourExpenses({
       setLoading(false);
     }
   }
+  async function deleteExpense(expenseId: string) {
+    try {
+      await fetch("/api/delete-expense", {
+        method: "DELETE",
+        body: JSON.stringify({
+          userId: localStorage.getItem("userId"),
+          expenseId,
+        }),
+      });
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  }
   useEffect(() => {
     getExpenses();
   }, []);
@@ -51,8 +67,17 @@ export default function YourExpenses({
             : "Your expenses"}{" "}
           -{" "}
         </span>
-        <span className="text-green-400">₹{totalExpenses||0}</span>
+        <span className="text-green-400">₹{totalExpenses || 0}</span>
       </h1>
+      {!hideDelete && moneyUserOwes ? (
+        <h3 className="text-center text-md font-bold w-full mb-2">
+          <span>You have to pay - </span>
+          <span className="text-red-600">
+            ₹{(moneyUserOwes / 6).toFixed(2)}{" "}
+          </span>
+          in total.
+        </h3>
+      ) : null}
       {expenses &&
         expenses.map(({ price, title, date, _id }, key) => {
           return (
@@ -68,7 +93,10 @@ export default function YourExpenses({
                 <div>- {formatDate(date)}</div>
               </div>
               {!hideDelete && (
-                <div className="h-[25px] w-[25px]">
+                <div
+                  className="h-[25px] w-[25px]"
+                  onClick={(e) => deleteExpense(_id)}
+                >
                   <Cross />
                 </div>
               )}
