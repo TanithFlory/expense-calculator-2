@@ -73,7 +73,7 @@ export default function YourExpenses({
         <h3 className="text-center text-md font-bold w-full mb-2">
           <span>You have to pay - </span>
           <span className="text-red-600">
-            ₹{(moneyUserOwes / 6).toFixed(2)}{" "}
+            ₹{(moneyUserOwes / 4).toFixed(2)}{" "}
           </span>
           in total.
         </h3>

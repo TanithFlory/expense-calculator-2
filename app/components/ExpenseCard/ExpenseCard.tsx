@@ -16,9 +16,9 @@ export default function ExpenseCard({
         <div className="flex flex-col items-start justify-left">
           <div>{userId}</div>
           <div>
-            <span className="text-sm">₹</span>{" "}
+            <span className="text-sm">Total </span>
             <span className="text-green-400 text-sm font-bold">
-              {totalExpenses || 0}
+            ₹{totalExpenses || 0}
             </span>
           </div>
         </div>
@@ -27,7 +27,7 @@ export default function ExpenseCard({
             className="bg-green-400 rounded-md px-2 py-1 text-sm text-black cursor-pointer"
             href={paymentLink}
           >
-            Pay
+            Pay - ₹{(totalExpenses / 4).toFixed(2)}
           </a>
         ) : null}
       </div>
